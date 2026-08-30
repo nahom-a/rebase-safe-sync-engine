@@ -1,0 +1,30 @@
+{
+  "name": "rebase-safe-codec",
+  "version": "1.0.0",
+  "description": "Distributed schema-evolution and delta synchronization engine for hierarchical documents and collaborative state",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/runner.mjs src/index.js",
+    "test:visible": "node tests/run_scenarios.js",
+    "test:alt": "node tests/runner.mjs src/codec-alt.js",
+    "verify": "pytest tests/test_state.py -v"
+  },
+  "keywords": [
+    "distributed-systems",
+    "crdt",
+    "delta-sync",
+    "schema-evolution",
+    "collaborative-editing",
+    "tree-sync",
+    "wire-format",
+    "serialization",
+    "local-first",
+    "state-synchronization"
+  ],
+  "author": "Nahom Abera",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
