@@ -1,0 +1,142 @@
+{
+  "name": "multihop-4-link-roundtrip",
+  "description": "content unknown to both intermediate hops survives two hops of non-understanding peers",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "insert",
+          "parentId": "i2",
+          "index": 0,
+          "node": {
+            "id": "L6",
+            "type": "link",
+            "fields": {
+              "url": "http://chain"
+            },
+            "children": []
+          }
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    },
+    {
+      "op": "encode",
+      "id": "e2",
+      "baseline": "d1",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "label",
+          "value": "v1-touch"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d2",
+      "baseline": "genesis",
+      "bytes": "e2",
+      "version": 2
+    },
+    {
+      "op": "encode",
+      "id": "e3",
+      "baseline": "d2",
+      "version": 2,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "label",
+          "value": "v1-touch"
+        },
+        {
+          "op": "setField",
+          "nodeId": "i2",
+          "field": "dueDate",
+          "value": "2026-01-01"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d3",
+      "baseline": "genesis",
+      "bytes": "e3",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "fieldEquals",
+      "state": "d3",
+      "nodeId": "i1",
+      "field": "label",
+      "value": "v1-touch"
+    },
+    {
+      "kind": "fieldEquals",
+      "state": "d3",
+      "nodeId": "i2",
+      "field": "dueDate",
+      "value": "2026-01-01"
+    },
+    {
+      "kind": "nodePresent",
+      "state": "d3",
+      "nodeId": "L6"
+    },
+    {
+      "kind": "residueEmpty",
+      "state": "d3"
+    }
+  ]
+}

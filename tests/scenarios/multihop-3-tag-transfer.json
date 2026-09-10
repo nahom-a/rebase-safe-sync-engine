@@ -1,0 +1,115 @@
+{
+  "name": "multihop-3-tag-transfer",
+  "description": "v2 must recover a v3-authored tag node that the intermediate v1 peer never understood",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "insert",
+          "parentId": "s1",
+          "index": 0,
+          "node": {
+            "id": "T1",
+            "type": "tag",
+            "fields": {
+              "name": "urgent-work"
+            },
+            "children": []
+          }
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    },
+    {
+      "op": "encode",
+      "id": "e2",
+      "baseline": "d1",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "label",
+          "value": "hop1-edit"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d2",
+      "baseline": "genesis",
+      "bytes": "e2",
+      "version": 2
+    }
+  ],
+  "checks": [
+    {
+      "kind": "fieldEquals",
+      "state": "d2",
+      "nodeId": "i1",
+      "field": "label",
+      "value": "hop1-edit"
+    },
+    {
+      "kind": "nodePresent",
+      "state": "d2",
+      "nodeId": "T1"
+    },
+    {
+      "kind": "fieldEquals",
+      "state": "d2",
+      "nodeId": "T1",
+      "field": "name",
+      "value": "urgent-work"
+    },
+    {
+      "kind": "residueEmpty",
+      "state": "d2"
+    }
+  ]
+}

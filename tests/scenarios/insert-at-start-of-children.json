@@ -1,0 +1,82 @@
+{
+  "name": "insert-at-start-of-children",
+  "description": "inserting at index 0 places the new node first",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "insert",
+          "parentId": "s1",
+          "index": 0,
+          "node": {
+            "id": "i0",
+            "type": "item",
+            "fields": {
+              "label": "zero",
+              "priority": "low"
+            },
+            "children": []
+          }
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    }
+  ],
+  "checks": [
+    {
+      "kind": "childOrder",
+      "state": "d1",
+      "parentId": "s1",
+      "ids": [
+        "i0",
+        "i1",
+        "i2"
+      ]
+    }
+  ]
+}

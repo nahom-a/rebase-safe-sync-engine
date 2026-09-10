@@ -1,0 +1,73 @@
+{
+  "name": "move-within-same-parent-reorder",
+  "description": "moving a node within the same parent must produce the expected order",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "move",
+          "nodeId": "i2",
+          "newParentId": "s1",
+          "newIndex": 0
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    }
+  ],
+  "checks": [
+    {
+      "kind": "childOrder",
+      "state": "d1",
+      "parentId": "s1",
+      "ids": [
+        "i2",
+        "i1"
+      ]
+    }
+  ]
+}

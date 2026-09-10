@@ -1,0 +1,121 @@
+{
+  "name": "mixed-known-unknown-setfield-batch-single-hop",
+  "description": "a batch of setField ops across two nodes, some known some not, must each resolve independently",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "label",
+          "value": "known-edit"
+        },
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "estimate",
+          "value": 2
+        },
+        {
+          "op": "setField",
+          "nodeId": "i2",
+          "field": "priority",
+          "value": "urgent"
+        },
+        {
+          "op": "setField",
+          "nodeId": "i2",
+          "field": "label",
+          "value": "also-known"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    }
+  ],
+  "checks": [
+    {
+      "kind": "fieldEquals",
+      "state": "d1",
+      "nodeId": "i1",
+      "field": "label",
+      "value": "known-edit"
+    },
+    {
+      "kind": "roundTripFieldEquals",
+      "state": "d1",
+      "reencodeVersion": 1,
+      "decodeVersion": 3,
+      "nodeId": "i1",
+      "field": "estimate",
+      "value": 2
+    },
+    {
+      "kind": "fieldEquals",
+      "state": "d1",
+      "nodeId": "i2",
+      "field": "label",
+      "value": "also-known"
+    },
+    {
+      "kind": "roundTripFieldEquals",
+      "state": "d1",
+      "reencodeVersion": 1,
+      "decodeVersion": 3,
+      "nodeId": "i2",
+      "field": "priority",
+      "value": "urgent"
+    },
+    {
+      "kind": "fieldEquals",
+      "state": "d1",
+      "nodeId": "i2",
+      "field": "priority",
+      "value": "med"
+    }
+  ]
+}

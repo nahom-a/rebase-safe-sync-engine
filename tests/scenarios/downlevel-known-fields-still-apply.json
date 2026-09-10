@@ -1,0 +1,86 @@
+{
+  "name": "downlevel-known-fields-still-apply",
+  "description": "known edits in the same delta as unknown ones must still be applied",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "label",
+          "value": "one-edited"
+        },
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "priority",
+          "value": "urgent"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    }
+  ],
+  "checks": [
+    {
+      "kind": "fieldEquals",
+      "state": "d1",
+      "nodeId": "i1",
+      "field": "label",
+      "value": "one-edited"
+    },
+    {
+      "kind": "roundTripFieldEquals",
+      "state": "d1",
+      "reencodeVersion": 1,
+      "decodeVersion": 3,
+      "nodeId": "i1",
+      "field": "priority",
+      "value": "urgent"
+    }
+  ]
+}

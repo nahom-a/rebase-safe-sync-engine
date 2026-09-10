@@ -1,0 +1,90 @@
+{
+  "name": "delete-then-insert-new-node-same-parent",
+  "description": "deleting a node and inserting a differently-id'd node in the same delta must not conflate the two",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "delete",
+          "nodeId": "i2"
+        },
+        {
+          "op": "insert",
+          "parentId": "s1",
+          "index": 1,
+          "node": {
+            "id": "i2new",
+            "type": "item",
+            "fields": {
+              "label": "replacement",
+              "priority": "low"
+            },
+            "children": []
+          }
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    }
+  ],
+  "checks": [
+    {
+      "kind": "nodeAbsent",
+      "state": "d1",
+      "nodeId": "i2"
+    },
+    {
+      "kind": "childOrder",
+      "state": "d1",
+      "parentId": "s1",
+      "ids": [
+        "i1",
+        "i2new"
+      ]
+    }
+  ]
+}
