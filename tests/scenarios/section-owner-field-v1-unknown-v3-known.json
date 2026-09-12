@@ -1,0 +1,91 @@
+{
+  "name": "section-owner-field-v1-unknown-v3-known",
+  "description": "a v2+ optional field is preserved by v1 and understood natively by v3",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "s1",
+          "field": "owner",
+          "value": "alice"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    },
+    {
+      "op": "decode",
+      "id": "d2",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "roundTripFieldEquals",
+      "state": "d1",
+      "reencodeVersion": 1,
+      "decodeVersion": 3,
+      "nodeId": "s1",
+      "field": "owner",
+      "value": "alice"
+    },
+    {
+      "kind": "fieldEquals",
+      "state": "d2",
+      "nodeId": "s1",
+      "field": "owner",
+      "value": "alice"
+    },
+    {
+      "kind": "residueEmpty",
+      "state": "d2"
+    }
+  ]
+}

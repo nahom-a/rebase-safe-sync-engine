@@ -1,0 +1,109 @@
+{
+  "name": "non-resurrection-delete-parent-of-unknown-child",
+  "description": "deleting a whole subtree must take unknown content anywhere inside it with it",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "insert",
+          "parentId": "s1",
+          "index": 0,
+          "node": {
+            "id": "note1",
+            "type": "note",
+            "fields": {
+              "text": "n"
+            },
+            "children": [
+              {
+                "id": "L4",
+                "type": "link",
+                "fields": {
+                  "url": "http://z"
+                },
+                "children": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    },
+    {
+      "op": "encode",
+      "id": "e2",
+      "baseline": "d1",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "delete",
+          "nodeId": "note1"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d2",
+      "baseline": "genesis",
+      "bytes": "e2",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "nodeAbsent",
+      "state": "d2",
+      "nodeId": "note1"
+    },
+    {
+      "kind": "nodeAbsent",
+      "state": "d2",
+      "nodeId": "L4"
+    }
+  ]
+}

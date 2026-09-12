@@ -1,0 +1,73 @@
+{
+  "name": "uplevel-move-known",
+  "description": "a plain move authored at v1 is understood identically by v3",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "move",
+          "nodeId": "i1",
+          "newParentId": "s1",
+          "newIndex": 2
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "childOrder",
+      "state": "d1",
+      "parentId": "s1",
+      "ids": [
+        "i2",
+        "i1"
+      ]
+    }
+  ]
+}

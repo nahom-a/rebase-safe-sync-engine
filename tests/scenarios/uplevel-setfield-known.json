@@ -1,0 +1,75 @@
+{
+  "name": "uplevel-setfield-known",
+  "description": "a field known at every version round-trips across versions with no residue",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 2,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "s1",
+          "field": "title",
+          "value": "Renamed"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "fieldEquals",
+      "state": "d1",
+      "nodeId": "s1",
+      "field": "title",
+      "value": "Renamed"
+    },
+    {
+      "kind": "residueEmpty",
+      "state": "d1"
+    }
+  ]
+}

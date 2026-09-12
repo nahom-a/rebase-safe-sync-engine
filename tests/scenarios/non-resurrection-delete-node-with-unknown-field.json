@@ -1,0 +1,110 @@
+{
+  "name": "non-resurrection-delete-node-with-unknown-field",
+  "description": "v1 deletes a node carrying v3-only field and child content; nothing may resurface at v3",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 3,
+      "mutations": [
+        {
+          "op": "insert",
+          "parentId": "i2",
+          "index": 0,
+          "node": {
+            "id": "L3",
+            "type": "link",
+            "fields": {
+              "url": "http://y"
+            },
+            "children": []
+          }
+        },
+        {
+          "op": "setField",
+          "nodeId": "i2",
+          "field": "estimate",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 1
+    },
+    {
+      "op": "encode",
+      "id": "e2",
+      "baseline": "d1",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "delete",
+          "nodeId": "i2"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d2",
+      "baseline": "genesis",
+      "bytes": "e2",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "nodeAbsent",
+      "state": "d2",
+      "nodeId": "i2"
+    },
+    {
+      "kind": "nodeAbsent",
+      "state": "d2",
+      "nodeId": "L3"
+    },
+    {
+      "kind": "residueEmpty",
+      "state": "d2"
+    }
+  ]
+}

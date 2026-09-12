@@ -1,0 +1,61 @@
+{
+  "name": "size-bound-single-setfield",
+  "description": "a single known field edit must fit the size bound",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i1",
+          "field": "label",
+          "value": "x"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "kind": "sizeBound",
+      "bytes": "e1"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "uplevel-fully-understood-no-residue",
+  "description": "a v1-authored delta decoded by v3 leaves no residue",
+  "genesis": {
+    "id": "root",
+    "type": "root",
+    "fields": {},
+    "children": [
+      {
+        "id": "s1",
+        "type": "section",
+        "fields": {
+          "title": "Alpha",
+          "status": "open"
+        },
+        "children": [
+          {
+            "id": "i1",
+            "type": "item",
+            "fields": {
+              "label": "one",
+              "priority": "low"
+            },
+            "children": []
+          },
+          {
+            "id": "i2",
+            "type": "item",
+            "fields": {
+              "label": "two",
+              "priority": "med"
+            },
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "op": "encode",
+      "id": "e1",
+      "baseline": "genesis",
+      "version": 1,
+      "mutations": [
+        {
+          "op": "setField",
+          "nodeId": "i2",
+          "field": "label",
+          "value": "two-edited"
+        }
+      ]
+    },
+    {
+      "op": "decode",
+      "id": "d1",
+      "baseline": "genesis",
+      "bytes": "e1",
+      "version": 3
+    }
+  ],
+  "checks": [
+    {
+      "kind": "fieldEquals",
+      "state": "d1",
+      "nodeId": "i2",
+      "field": "label",
+      "value": "two-edited"
+    },
+    {
+      "kind": "residueEmpty",
+      "state": "d1"
+    }
+  ]
+}
