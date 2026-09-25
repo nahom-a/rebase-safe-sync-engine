@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rebase-safe-codec"
+version = "1.0.0"
+description = "Distributed schema-evolution and delta synchronization engine for hierarchical documents"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Nahom Abera", email = "nahoomaabera96@gmail.com" }
+]
+keywords = [
+    "distributed-systems",
+    "crdt",
+    "delta-sync",
+    "schema-evolution",
+    "state-synchronization",
+    "parity-testing",
+    "wire-format",
+    "ast-compaction"
+]
+dependencies = [
+    "pytest>=7.0.0",
+    "pytest-json-ctrf>=0.5.0",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
